@@ -25,7 +25,7 @@ export async function onRequestPost(context) {
         let apiEndpoint;
         if (uploadFile.type.startsWith('image/')) {
             telegramFormData.append("photo", uploadFile);
-            apiEndpoint = 'sendPhoto';
+            apiEndpoint = 'sendDocument';
         } else if (uploadFile.type.startsWith('audio/')) {
             telegramFormData.append("audio", uploadFile);
             apiEndpoint = 'sendAudio';
@@ -111,7 +111,7 @@ async function sendToTelegram(formData, apiEndpoint, env, retryCount = 0) {
         }
 
         // 图片上传失败时转为文档方式重试
-        if (retryCount < MAX_RETRIES && apiEndpoint === 'sendPhoto') {
+        if (retryCount < MAX_RETRIES && apiEndpoint === 'sendDocument') {
             console.log('Retrying image as document...');
             const newFormData = new FormData();
             newFormData.append('chat_id', formData.get('chat_id'));
